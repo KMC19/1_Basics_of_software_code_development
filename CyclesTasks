@@ -1,0 +1,215 @@
+//      Катушонок Мария. 01.10.2020
+//      Basic of software code development
+//      Tasks. Ветвления.
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String... args) {
+
+        //1. Напишите программу, где пользователь вводит любое целое положительное число. А программа суммирует
+        //все числа от 1 до введенного пользователем числа.
+        sumOfNumbersFromOneToN();
+
+        //2. Вычислить значения функции на отрезке [а,b] c шагом h:
+        findFunctionValue();
+
+        //3. Найти сумму квадратов первых ста чисел.
+        sumOfSquaredNumbers();
+
+        //4. Составить программу нахождения произведения квадратов первых двухсот чисел.
+        multiplicationOfSquaredNumbers();
+
+        //5. Даны числовой ряд и некоторое число е. Найти сумму тех членов ряда, модуль которых больше или равен
+        //заданному е. Общий член ряда имеет вид:
+        //An=1/(2^n)+1/(3^n)
+        findSumOfElementsOfNumberSeries();
+
+        //6. Вывести на экран соответствий между символами и их численными обозначениями в памяти компьютера.
+        printChars();
+
+        //7. Для каждого натурального числа в промежутке от m до n вывести все делители, кроме единицы и самого числа.
+        //m и n вводятся с клавиатуры.
+        findDividers();
+
+        //8. Даны два числа. Определить цифры, входящие в запись как первого так и второго числа.
+        findSameDigitsInTwoNumbers();
+    }
+
+    private static void findDividers() {
+        System.out.println("Enter two numbers(a <= b).\nInput number a:");
+
+        //Считываем входные параметры: натуральные числа a b и.
+        Scanner scanner = new Scanner(System.in);
+        int a = scanner.nextInt();
+        System.out.println("Input number b:");
+        int b = scanner.nextInt();
+
+        //Проверяем, задан ли промежуток корректно.
+        if (a > b) {
+            System.out.println("Line segment [" + a + "," + b + "] is not correct.");
+            System.exit(1);
+        }
+
+        //Перебираем числа от a до b включительно
+        for (int i = a; i <= b; i++) {
+            System.out.print("\nDividers of " + i + ":");
+            //Проверяем остаток от деления
+            for (int j = 2; j <= i/2; j++) {
+                if(i%j == 0) {
+                    System.out.print(j + " ");
+                }
+            }
+        }
+    }
+
+    private static void findSameDigitsInTwoNumbers() {
+        System.out.println("Enter two numbers.\nInput number a:");
+
+        //Считываем входные параметры: два числа а и b.
+        Scanner scanner = new Scanner(System.in);
+        int a = scanner.nextInt();
+        System.out.println("Input number b:");
+        int b = scanner.nextInt();
+
+        //Посчитаем длину введенных чисел
+        int lengthA = (int) (Math.log10(a));
+        int lengthB = (int) (Math.log10(b));
+        //Создаем копии входных параметров
+        int copyOfA = a;
+        int copyOfB = b;
+
+        //Перебираем все цифры от 0 до 9 и проверяем, содержат ли их числа a и b.
+        for (int i = 0; i < 10; i++) {
+            for (int j = lengthA; j >= 0; j--) {
+                int digitOfA = (int) (a / Math.pow(10, j));
+                a = (int) (a - digitOfA * Math.pow(10, j));
+                if (i == digitOfA) {
+                    for (int k = lengthB; k >= 0; k--) {
+                        int digitOfB = (int) (b / Math.pow(10, k));
+                        b = (int) (b - digitOfB * Math.pow(10, k));
+                        if (digitOfB == digitOfA) {
+                            System.out.print(digitOfA + " ");
+                            break;
+                        }
+                    }
+                    break;
+                }
+                b = copyOfB;
+
+            }
+            a = copyOfA;
+
+        }
+
+    }
+
+    private static void printChars() {
+        for (int i = 0; i <= 65_335; i++) {
+            char ch = (char) i;
+            if (i % 50 == 0) System.out.print("\n"); //Перевод строки для каждых 50-элементов
+            System.out.print(ch + " ");
+        }
+    }
+
+    private static void findSumOfElementsOfNumberSeries() {
+        System.out.println("Enter count of elements of number series:");
+
+        //Считываем входные параметры: размер числового ряда n и некоторое чилсо е.
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        System.out.println("Input number e:");
+        double e = scanner.nextDouble();
+
+        //Пенременная для хранения результирующей суммы
+        double sum = 0.;
+
+        for (int i = 0; i <= n; i++) {
+            double element = 1. / Math.pow(2., i) + 1. / Math.pow(3., i);
+            if(Math.abs(element) > e) sum = sum + element;
+        }
+
+        //Вывод результата
+        System.out.println("Sum of elements more than " + e + " equals " + sum);
+    }
+
+    private static void findFunctionValue() {
+        System.out.println("Enter [a,b] limits.\nInput number a:");
+
+        //Считываем входные параметры: числа a и b.
+        Scanner scanner = new Scanner(System.in);
+        BigDecimal a = BigDecimal.valueOf(scanner.nextDouble());
+        System.out.println("Input number b:");
+        BigDecimal b =  BigDecimal.valueOf(scanner.nextDouble());
+
+        //Считываем шаг
+        System.out.println("Input number h:");
+        BigDecimal h = BigDecimal.valueOf(scanner.nextDouble());
+
+        if (a.compareTo(b) > 0) {
+            System.out.println("line segment [" + a + "," + b + "] is not correct.");
+            System.exit(1);
+        }
+
+        while (a.compareTo(b) <= 0) {
+            if ((a.compareTo(BigDecimal.valueOf(2)) > 0)) {
+                System.out.println("y = x = " + a);
+            } else {
+                System.out.println("y = -x = " + a.multiply(BigDecimal.valueOf(-1)));
+            }
+            a = a.add(h);
+        }
+
+    }
+
+    private static void multiplicationOfSquaredNumbers() {
+        int LENGTH = 200;
+
+        //Переменная для хранения суммы
+        BigInteger sum = new BigInteger("1");
+
+        for (long i = 1L; i <= LENGTH; i++) {
+            sum = BigInteger.valueOf(i * i).multiply(sum);
+        }
+
+        //Вывод результата
+        System.out.println("Multiplication of all squared numbers from 1 to " + LENGTH + " equals " + sum);
+
+    }
+
+    private static void sumOfSquaredNumbers() {
+        int LENGTH = 100;
+
+        //Переменная для хранения суммы
+        long sum = 0;
+
+        for (int i = 1; i <= LENGTH; i++) {
+            sum = sum + i * i;
+        }
+
+        //Вывод результата
+        System.out.println("Sum of all squared numbers from 1 to " + LENGTH + " equals " + sum);
+    }
+
+    private static void sumOfNumbersFromOneToN() {
+        System.out.println("Enter positive integer:");
+
+        //Считываем входной параметр: натуральное число n.
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+
+        //Переменная для хранения суммы
+        long sum = 0;
+
+        for (int i = 1; i <= n; i++) {
+            sum = sum + i;
+        }
+
+        //Вывод результата
+        System.out.println("Sum of all numbers from 1 to " + n + " equals " + sum);
+
+    }
+
+}
