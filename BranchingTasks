@@ -1,0 +1,194 @@
+//      Катушонок Мария. 30.09.2020
+//      Basic of software code development
+//      Tasks. Ветвления.
+
+import java.util.Scanner;
+
+public class BranchingTasks {
+
+    public static void main(String... args) {
+        //1. Даны два угла треугольника (в градусах). Определить, существует ли такой треугольник, и если да, то будет ли
+        //он прямоугольным.
+        isItTriangle();
+
+        //2. Найти max{min(a, b), min(c, d)}.
+        maximumOfMinimums();
+
+        //3. Даны три точки А(х1,у1), В(х2,у2) и С(х3,у3). Определить, будут ли они расположены на одной прямой.
+        isPointsOnOneLine();
+
+        //4. Заданы размеры А, В прямоугольного отверстия и размеры х, у, z кирпича. Определить, пройдет ли кирпич через
+        //отверстие.
+        isBrickInAB();
+
+        //5. Вычислить значение функции F(x) :
+        // x^2 - 3x + 9, x>=3
+        // 1/(x^3 + 6),  x< 3
+        findValueOfFunction();
+
+    }
+
+    private static void findValueOfFunction() {
+        System.out.println("To find value of the function F(x) =\n" +
+                "x^2 - 3x + 9, x>=3\n" +
+                "1/(x^3 + 6),  x< 3\n" +
+                "specify x:");
+
+        //Считываем входной параметр х.
+        Scanner scanner = new Scanner(System.in);
+        double x = scanner.nextDouble();
+
+        //Переменная для хранения результата:
+        double result;
+
+        if(x >= 3){
+            result = x * x - 3. * x + 9.;
+        } else {
+            result = 1/(Math.pow(x, 3.) + 6);
+        }
+
+        //Вывод результата:
+        System.out.println("F(x)= " + "F(" + x + ")= " + result);
+
+    }
+
+    private static void isBrickInAB() {
+        System.out.println("Enter hole dimensions.\n" +
+                "Input number A:");
+
+        //Считываем входные параметры: A и В - размеры прямоугольного отверстия.
+        Scanner scanner = new Scanner(System.in);
+        double a = scanner.nextDouble();
+        System.out.println("Input number B:");
+        double b = scanner.nextDouble();
+        //Считываем входные параметры: x, y и z - размеры кирпича.
+        System.out.println("Enter the dimensions of the brick.\nInput number x:");
+        double x = scanner.nextDouble();
+        System.out.println("Input number y:");
+        double y = scanner.nextDouble();
+        System.out.println("Input number z:");
+        double z = scanner.nextDouble();
+
+        //Проверяем, может ли любая из сторон квадрата пройти в отверстие
+        boolean result = (isSmallRectFitsIntoBigRect(x, y, a, b)    //Войдет ли прямоугольник ху в прямоугольник АВ
+                        ||isSmallRectFitsIntoBigRect(y, z, a, b)    //Войдет ли прямоугольник yz в прямоугольник АВ
+                        ||isSmallRectFitsIntoBigRect(x, z, a, b));  //Войдет ли прямоугольник хz в прямоугольник АВ
+
+
+        if(result){
+            System.out.println("The brick will go through the hole");
+        } else {
+            System.out.println("Brick won't go through the hole");
+        }
+
+    }
+
+    private static boolean isSmallRectFitsIntoBigRect(double p, double q, double a, double b) {
+        //Если и только если выполняется одно из этих условий,
+        // меньший прямоугольник со сторонами p и q( p >= q) полностью помещается
+        // в больший прямоугольник со сторонами a и b( a >= b):
+        //(p <= a && q <= b) || (p > a &&b >= (2*p*q*a + (p*p-q*q)*sqrt(p*p+q*q-a*a)) / (p*p+q*q))
+        //Источник https://www.jstor.org/stable/2691523?seq=1
+        double temp;
+
+        //Если p < q, меняем их местами
+        if (p < q){
+            temp = p;
+            p = q;
+            q = temp;
+        }
+
+        //Если a < b, меняем их местами
+        if (a < b){
+            temp = a;
+            a = b;
+            b = temp;
+        }
+
+        return (p <= a && q <= b) || (p > a &&b >= (2*p*q*a + (p*p-q*q)*Math.sqrt(p*p+q*q-a*a)) / (p*p+q*q));
+
+    }
+
+    private static void isPointsOnOneLine() {
+        //TODO пользовательский ввод координат?
+        //координаты точки А
+        double x_1 = 0.0;
+        double y_1 = 0.0;
+
+        //координаты точки В
+        double x_2 = 1.0;
+        double y_2 = 1.0;
+
+        //координаты точки С
+        double x_3 = 2.0;
+        double y_3 = 2.0;
+
+        boolean isPointsOnOneLine = ((x_3 - x_1) / (x_2 - x_1) == (y_3 - y_1) / (y_2 - y_1));
+
+        if(isPointsOnOneLine){
+            System.out.println("A, B and C is on the one line.");
+        } else {
+            System.out.println("A, B and C is NOT on the one line.");
+        }
+    }
+
+    private static void maximumOfMinimums() {
+        System.out.println("To find max{min(a, b), min(c, d)}.\n" +
+                "Input number a:");
+
+        //Считываем входные параметры: переменные a, b, c и d.
+        Scanner scanner = new Scanner(System.in);
+        double a = scanner.nextDouble();
+        System.out.println("Input number b:");
+        double b = scanner.nextDouble();
+        System.out.println("Input number c:");
+        double c = scanner.nextDouble();
+        System.out.println("Input number d:");
+        double d = scanner.nextDouble();
+
+        //Находим минимумы
+        double minAB = a < b? a : b;
+        double minCD = c < d? c : d;
+
+        //Находим максимум среди минимумов
+        double max = minAB > minCD? minAB : minCD;
+
+        //Результат также можно получить с помощью класса Math
+        //double max = Math.max(Math.min(a,b),Math.min(c,d));
+
+        //Выводим результат
+        System.out.println("max{min(a, b), min(c, d)} =\n" +
+                "max{min("+ a +", "+ b +"), min("+ c +", " + d +")} = " + max);
+
+    }
+
+    private static void isItTriangle() {
+        //
+        System.out.println("Specify values of two triangle angles.\n" +
+                "Input value of first angle:");
+
+        //Считываем входные параметры: углы треугольника.
+        Scanner scanner = new Scanner(System.in);
+        double firstAngle = scanner.nextDouble();
+        System.out.println("Input value of second angle:");
+        double secondAngle = scanner.nextDouble();
+
+        //Проверяем,является ли фигура треугольником.
+        boolean isTriangle = (firstAngle > 0 && secondAngle > 0 && firstAngle + secondAngle < 180);
+
+        //Если фигура трекгольник, проверяем прямоугольный ли он.
+        if (isTriangle){
+            double thirdAngle = 180. - firstAngle - secondAngle;
+            boolean isRightTriangle = (firstAngle == 90 || secondAngle == 90 || thirdAngle == 90);
+            //Выводим результат в зависимости от наличия прямого угла
+            if (isRightTriangle){
+                System.out.println("It is right triangle");
+            } else {
+                System.out.println("It is triangle");
+            }
+        } else { //Если фигура - не треугольник, выводим результат
+            System.out.println("It is NOT triangle");
+        }
+        
+    }
+}
