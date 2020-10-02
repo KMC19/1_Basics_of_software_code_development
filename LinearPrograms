@@ -1,0 +1,159 @@
+//      Катушонок Мария. 30.09.2020
+//      Basic of software code development
+//      Tasks. Линейные программы.
+
+import java.util.Scanner;
+
+public class LinearPrograms {
+
+    public static void main(String... args) {
+        //1. Найдите значение функции: z = ( (a – 3 ) * b / 2) + c.
+        findLinearFunctionValue();
+
+        //2. Вычислить значение выражения по формуле (все переменные принимают действительные значения):
+        findPowerFunctionValue();
+
+        //3. Вычислить значение выражения по формуле (все переменные принимают действительные значения):
+        //   (𝑠𝑖𝑛 𝑥 + 𝑐𝑜𝑠 𝑦)/(𝑐𝑜𝑠 𝑥 − 𝑠𝑖𝑛 𝑦)∗ 𝑡𝑔 𝑥𝑦
+        findTrigonometricFunctionValue();
+
+        //4. Дано действительное число R вида nnn.ddd (три цифровых разряда в дробной и целой частях).
+        // Поменять местами дробную и целую части числа и вывести полученное значение числа.
+        changeNumberParts();
+
+        //5. Дано натуральное число Т, которое представляет длительность прошедшего времени в секундах. Вывести
+        //данное значение длительности в часах, минутах и секундах в следующей форме:
+        //ННч ММмин SSc.
+        printTime();
+
+        //6. Для данной области составить линейную программу, которая печатает true, если точка с координатами (х, у)
+        //принадлежит закрашенной области, и false — в противном случае:
+        isPointInArea();
+
+    }
+
+    private static void isPointInArea() {
+        //Очевидно, что заданная область состоит из двух квадратов:
+        //Первый квадрат x = [-2,2], y = [0,4]
+        //Второй квадрат x = [-4,4], y = [-3,0]
+
+        System.out.println("Specify point in two-dimensional space.\n" +
+                "Input number x:");
+
+        //Считываем входные параметры:
+        Scanner scanner = new Scanner(System.in);
+        double x = scanner.nextDouble();
+        System.out.println("Input number y:");
+        double y = scanner.nextDouble();
+
+        //Определим, попала ли точка в первый квадрат
+        boolean isPointInArea =  (x >= -2 && x <= 2 && y >= 0 && y <= 4)
+                ||(x >= -4 && x <= 4 && y >= -3 && y <= 0);
+
+        System.out.println("Is point (" + x + "," + y + ") in area? " + isPointInArea);
+    }
+
+    private static void printTime() {
+        //Определим константы для конвертации секунд:
+        final int SECONDS_IN_HOUR = 3600;
+        final int SECONDS_IN_MINUTE = 60;
+
+        //Сгенерируем натуральное число T с максимальным пределом для типа long
+        long minTimeValue = 1L;
+        long maxTimeValue = 9223372036854775807L;
+        long T = minTimeValue + (long) (Math.random() * (maxTimeValue - minTimeValue));
+
+        //Выделим часы,минуты и секунды
+        long hours = (T/SECONDS_IN_HOUR);
+        int minutes = (int) ((T - hours * SECONDS_IN_HOUR) / SECONDS_IN_MINUTE);
+        int seconds =  (int) (T - hours * SECONDS_IN_HOUR - minutes * SECONDS_IN_MINUTE);
+
+        //Вывод секунд в формате "ННч ММмин SSc"
+        System.out.println(T + "с = "+ hours + "ч " + minutes + "мин "+ seconds + "c");
+
+    }
+
+    private static void changeNumberParts() {
+        //Сгенерируем случайное число вида nnn.ddd
+        double low = .001;
+        double high = 1000.;
+        double r = Math.round((( Math.random() * (high-low) ) + low)*1000.) / 1000.;
+        //Вывод сгенерированного числа
+        System.out.println(r);
+
+        //выделим целую часть
+        int integerNumberPart = (int)r;
+        //выделим дробную часть
+        int fractionalNumberPart = (int) (r *1000) - integerNumberPart * 1000;
+
+        //Переставим местами целую и дробную части
+        r = fractionalNumberPart + integerNumberPart/1000.;
+
+        //Вывод результата
+        System.out.println(r);
+    }
+
+    private static void findTrigonometricFunctionValue() {
+        System.out.println("To find value of the function: (sin x + cos y)/(cos x - sin y) * tg x*y\n" +
+                "specify values of variables.\n" +
+                "Input number x:");
+
+        //Считываем входные параметры: переменные a, b, c.
+        Scanner scanner = new Scanner(System.in);
+        double x = scanner.nextDouble();
+        System.out.println("Input number y:");
+        double y = scanner.nextDouble();
+
+        //Переменная для хранения результата:
+        double z =  (Math.sin(x) + Math.cos(y))/(Math.cos(x) - Math.sin(y))*Math.tan(x*y);
+
+        //Вывод результата
+        System.out.println("z = (sin x + cos y)/(cos x - sin y) * tg x*y" +
+                " = (sin "+ x +" + cos "+ y +")/(cos "+ x +" - sin "+ y +") * tg "+ x +"*"+ y +" = \n" +
+                " = "+ z );
+    }
+
+    private static void findPowerFunctionValue() {
+        System.out.println("To find value of the function:  z = (b + sqrt(b^2 + 4ac))/(2a) - a^3*c + b^(-2)\n" +
+                "specify values of variables:\n" +
+                "Input number a:");
+
+        //Считываем входные параметры: переменные a, b, c.
+        Scanner scanner = new Scanner(System.in);
+        double a = scanner.nextDouble();
+        System.out.println("Input number b:");
+        double b = scanner.nextDouble();
+        System.out.println("Input number c:");
+        double c = scanner.nextDouble();
+
+        //Переменная для хранения результата:
+        double z =  (b + Math.sqrt(b*b + 4.*a*c))/(2.*a) - Math.pow(a,3.)*c + Math.pow(b,-2.);
+
+        //Вывод результата
+        System.out.println("z = (b + sqrt(b^2 + 4ac))/(2a) - a^3*c + b^(-2) \n" +
+                " = ("+b+" + sqrt("+b+"^2 + 4*"+a+"*"+c+"))/(2*"+a+") - "+a+"^3*"+c+" + "+b+"^(-2) = \n" +
+                " = "+ z );
+    }
+
+    private static void findLinearFunctionValue() {
+        System.out.println("To find value of the function:  z = (a – 3 ) * b / 2) + c\n" +
+                "specify values of variables.\n" +
+                "Input number a:");
+
+        //Считываем входные параметры: переменные a, b, c.
+        Scanner scanner = new Scanner(System.in);
+        double a = scanner.nextDouble();
+        System.out.println("Input number b:");
+        double b = scanner.nextDouble();
+        System.out.println("Input number c:");
+        double c = scanner.nextDouble();
+
+        //Переменная для хранения результата:
+        double z =  (a- 3.) * b / 2.  + c;
+
+        //Вывод результата
+        System.out.println("z = (a – 3 ) * b / 2) + c = " +
+                "("+ a + " – 3 ) * "+ b +" / 2) + " + c + " = " + z );
+    }
+
+}
